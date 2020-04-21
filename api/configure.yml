@@ -1,0 +1,20 @@
+#** default.yml **#
+#=================================
+# Author: newini
+# Date: April 2020
+# Project: GPS server
+# Description: API configure
+#=================================
+
+
+# DB
+db_path: ../db/gps.sqlite3
+
+# Log
+logfile_dir: .
+
+
+# for development
+host: 0.0.0.0
+port: 5575
+debug: true
