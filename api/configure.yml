@@ -7,14 +7,19 @@
 #=================================
 
 
-# DB
-db_path: ../db/gps.sqlite3
+# Token
+GPS_SERVER_API_TOKEN: abcd1234
+
+
+# MongoDB
+MONGO_URI: mongodb://127.0.0.1:27017/gps
+
 
 # Log
-logfile_dir: .
+logfile_dir: logs
 
 
 # for development
 host: 0.0.0.0
-port: 5575
+port: 5001
 debug: true
