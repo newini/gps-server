@@ -40,18 +40,12 @@ def initializeConfigure():
 import os, datetime
 import logging, coloredlogs
 def initializeLogging(config):
-    # Create log directory if need
-    if len(config["logfile_dir_path"].split("/")) > 1:
-        log_directory = config["logfile_dir_path"].rsplit("/", 1)[0]
-        if not os.path.exists(log_directory):
-            os.makedirs(log_directory)
-
     logging.basicConfig(
         level=logging.DEBUG,
         format="%(asctime)s %(levelname)-8s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         filename="%s/gps_server_%s.log"
-        % (config["logfile_dir_path"], datetime.datetime.now().strftime("%Y-%m-%d")),
+        % (config["logfile_dir_path"], datetime.datetime.now().strftime("%Y%m")),
         filemode="a",
     )
     console = logging.StreamHandler()
