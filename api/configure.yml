@@ -16,7 +16,7 @@ MONGO_URI: mongodb://127.0.0.1:27017/gps
 
 
 # Log
-logfile_dir: logs
+logfile_dir_path: /tmp
 
 
 # for development

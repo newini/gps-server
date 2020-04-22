@@ -11,13 +11,12 @@
 import sys
 sys.path.insert(0, '/var/www/gps-server/api')
 
-# Problem on loading lib64 packages
-# So, have to append lib64
+# Problem on loading lib64 packages, So, have to append lib64
 sys.path.append('/usr/local/lib64/python3.6/site-packages')
 
-# Clear arguments
+# Clear arguments and Add arguments
 sys.argv = ['']
-# Add arguments
+# config path
 sys.argv.append('--config')
 sys.argv.append('/var/www/gps-server/api/my_configure.yml')
 
