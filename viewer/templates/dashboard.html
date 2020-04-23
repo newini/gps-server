@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="jumbotron home-jumbotron">
+    <div class="container">
+      <h1 class="display-4"><span class="live-title">Loading session</span></h1>
+      <table class="table table-hover">
+        <tbody>
+            <tr>
+              <th>Show</td>
+              <th>Name</td>
+              <th>Connection</td>
+              <th>GPS signal</td>
+            </tr>
+          {% for device in devices %}
+            <tr>
+              <td><input type="checkbox" id={{device["name"]}} value={{device["name"]}}></td>
+              <td>{{device["name"]}}</td>
+              <td><code class="device-now-connection"></code></td>
+              <td><code class="device-now-gps-signal"></code></td>
+            </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+  <div class="message_holder"></div>
+
+  <!-- style in application.css not applied. WHY? -->
+  <div id="map" style="height: 520px;"></div>
+
+  <!-- flask-socketio -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    var map = null;
+    var position = {};
+    var marker = null;
+    var socket = null;
+
+    function tracker() {
+      //var trip = live(data);
+
+      if(marker)
+        marker.setMap(null);
+
+      marker = new google.maps.Marker({
+        //position: trip['coord'],
+        position: position,
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5
+          },
+        title: 'Current position'
+      });
+
+      if(position['lat'])
+        map.setCenter(position);
+
+      //var speed = trip['speed'].toFixed(2)
+      //var speedtext = speed + ' km/h';
+
+      //$('.live-title').attr('class', liveclass).html(livetitle);
+      //$('.trip-signal').html(signal);
+      //$('.trip-updated').html(trip['update']);
+      //$('.trip-now-speed').html(speedtext);
+    }
+
+    function connect() {
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+      socket.on('connect', function() {
+        socket.emit('server_connected', {id: socket.id});
+
+        var form = $('form').on('submit', function(e) {
+          e.preventDefault();
+          let user_name = $('input.username').val();
+          let user_input = $('input.message').val();
+          socket.emit('my event', {user_name : user_name, message : user_input});
+          $('input.message').val('').focus();
+        })
+      });
+
+      socket.on('my response', function(msg) {
+        console.log(msg);
+        if (typeof msg.lat !== 'undefined') {
+          $('h3').remove();
+          //$('div.message_holder').append('<div><b style="color: #000">'+msg.lat+'</b> '+msg.lng+'</div>');
+        }
+        position = {lat: msg.lat, lng: msg.lng};
+        tracker();
+      });
+
+      socket.on('disconnect', function() {
+        socket.emit('server_disconnected', {id: socket.id});
+      });
+
+      //socket = new WebSocket("ws://live.gps.maxux.net/");
+
+      //socket.onopen = function() {
+      //  console.log("websocket open");
+      //}
+
+      //socket.onmessage = function(msg) {
+      //  json = JSON.parse(msg.data);
+      //  // console.log(json);
+      //  tracker(json);
+      //}
+
+      //socket.onclose = function() {
+      //  $('#disconnected').show();
+      //  setTimeout(connect, 2000);
+      //}
+    }
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 14,
+        center: {lat: 35.6762, lng: 139.6503},
+        mapTypeId: 'terrain'
+      });
+
+      connect();
+    }
+  </script>
+
+  <!-- Google map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=geometry" async defer></script>
+{% endblock %}

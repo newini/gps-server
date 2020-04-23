@@ -4,6 +4,35 @@ A GPS Server with web interface powered by SQlite3, Flask, and Python.
 
 
 ## How to use?
+### Install MongoDB
+/etc/yum.repos.d/mongodb-org.repo
+```
+[mongodb-org-4.2]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.2/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc
+```
+
+```
+sudo dnf install mongodb-org
+```
+
+```
+systemctl enable mongod
+systemctl start mongod
+```
+
+## Install Apache2
+allow the httpd process make network request to access to MongoDB
+
+```
+sudo /usr/sbin/setsebool -P httpd_can_network_connect 1
+```
+
+
+### Install python packages
 ```
 cd gps-server
 pip3 install --user --upgrade pip

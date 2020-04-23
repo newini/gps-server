@@ -1,0 +1,25 @@
+#** default.yml **#
+#=================================
+# Author: newini
+# Date: April 2020
+# Project: GPS server
+# Description: API configure
+#=================================
+
+
+# MongoDB
+MONGO_URI: mongodb://127.0.0.1:27017/gps
+
+
+# Google map API key
+GOOGLE_MAP_API_KEY: ''
+
+
+# Log
+logfile_dir_path: logs
+
+
+# for development
+host: 0.0.0.0
+port: 5000
+debug: true

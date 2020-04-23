@@ -1,4 +1,6 @@
 __pycache__
 *.py[cod]
 *.log
+*.out
 *.sqlite3
+my_*
